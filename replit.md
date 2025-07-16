@@ -14,6 +14,50 @@ EduRespond is a full-stack web application designed to automate teacher communic
 
 Preferred communication style: Simple, everyday language.
 
+## Feature Enhancement Roadmap
+
+The following features have been identified for future development:
+
+### 1. Enhanced Personalization
+- Student/Parent Profiles: Store student names, grades, parent contact details, communication history
+- Auto-insert personal details in responses for customized communication
+
+### 2. Scheduled & Bulk Messaging
+- Scheduled Responses: Draft and schedule messages for exams, meetings
+- Broadcast Messages: Send announcements to all parents or selected groups
+
+### 3. Attachments & Resource Sharing
+- File Attachments: Attach homework sheets, grade reports, permission slips
+- Resource Library: Store reusable files and resources for quick access
+
+### 4. Smart Notifications
+- Follow-up Reminders: Automatic reminders for unanswered messages
+- Mobile/Email Alerts: Notify teachers of urgent incoming messages
+
+### 5. Integration with LMS/School Systems
+- Gradebook Sync: Connect to Google Classroom and other LMS platforms
+- Calendar Integration: Sync class schedules and meeting dates
+
+### 6. AI Improvement Tools
+- Tone & Formality Selector: Choose response tone (formal, friendly, neutral)
+- Sentiment Analysis: Flag negative or urgent inquiries for priority handling
+
+### 7. Parent/Student Self-Service Portal
+- FAQ Bot: Chatbot for instant answers to common questions
+- Knowledge Base: Self-service information portal
+
+### 8. Communication Insights & Reports
+- Detailed Reports: Weekly/monthly analytics on response times and topics
+- Teacher Performance Metrics: Efficiency tracking for schools
+
+### 9. Multi-Platform Access
+- Mobile App: On-the-go response capabilities
+- WhatsApp/Email Integration: Seamless communication channel sync
+
+### 10. Data Privacy & Permissions
+- Role-Based Access: Admin-managed permissions system
+- Secure Cloud Backups: Automatic data protection
+
 ## System Architecture
 
 ### Frontend Architecture
