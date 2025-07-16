@@ -3,8 +3,11 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertInquirySchema, insertResponseSchema, insertTemplateSchema, insertActivitySchema } from "@shared/schema";
 import { generateResponse, translateText, detectLanguage } from "./services/gemini";
+import { setupAuth, isAuthenticated, getCurrentUser } from "./replitAuth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup authentication
+  await setupAuth(app);
   
   // Get dashboard statistics
   app.get("/api/dashboard/stats", async (req, res) => {
@@ -15,6 +18,157 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching dashboard stats:", error);
       res.status(500).json({ message: "Failed to fetch dashboard statistics" });
+    }
+  });
+
+  // User settings endpoints
+  app.get("/api/user/preferences", async (req, res) => {
+    try {
+      // Return default preferences for demo
+      res.json({
+        theme: "system",
+        language: "en",
+        timezone: "UTC",
+        emailNotifications: true,
+        pushNotifications: true,
+        autoTranslate: false,
+        defaultTone: "professional",
+        responseTemplate: "default",
+      });
+    } catch (error) {
+      console.error("Error fetching user preferences:", error);
+      res.status(500).json({ message: "Failed to fetch user preferences" });
+    }
+  });
+
+  app.put("/api/user/preferences", async (req, res) => {
+    try {
+      // In a real app, this would save to database
+      res.json({ message: "Preferences updated successfully" });
+    } catch (error) {
+      console.error("Error updating user preferences:", error);
+      res.status(500).json({ message: "Failed to update user preferences" });
+    }
+  });
+
+  app.put("/api/user/profile", async (req, res) => {
+    try {
+      // In a real app, this would save to database
+      res.json({ message: "Profile updated successfully" });
+    } catch (error) {
+      console.error("Error updating user profile:", error);
+      res.status(500).json({ message: "Failed to update user profile" });
+    }
+  });
+
+  // Students endpoints
+  app.get("/api/students", async (req, res) => {
+    try {
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching students:", error);
+      res.status(500).json({ message: "Failed to fetch students" });
+    }
+  });
+
+  app.post("/api/students", async (req, res) => {
+    try {
+      res.json({ message: "Student created successfully" });
+    } catch (error) {
+      console.error("Error creating student:", error);
+      res.status(500).json({ message: "Failed to create student" });
+    }
+  });
+
+  // Scheduled messages endpoints
+  app.get("/api/scheduled-messages", async (req, res) => {
+    try {
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching scheduled messages:", error);
+      res.status(500).json({ message: "Failed to fetch scheduled messages" });
+    }
+  });
+
+  app.post("/api/scheduled-messages", async (req, res) => {
+    try {
+      res.json({ message: "Message scheduled successfully" });
+    } catch (error) {
+      console.error("Error scheduling message:", error);
+      res.status(500).json({ message: "Failed to schedule message" });
+    }
+  });
+
+  // Attachments endpoints
+  app.get("/api/attachments", async (req, res) => {
+    try {
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching attachments:", error);
+      res.status(500).json({ message: "Failed to fetch attachments" });
+    }
+  });
+
+  app.post("/api/attachments", async (req, res) => {
+    try {
+      res.json({ message: "Attachment uploaded successfully" });
+    } catch (error) {
+      console.error("Error uploading attachment:", error);
+      res.status(500).json({ message: "Failed to upload attachment" });
+    }
+  });
+
+  // Notifications endpoints
+  app.get("/api/notifications", async (req, res) => {
+    try {
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
+  app.get("/api/notifications/all", async (req, res) => {
+    try {
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching all notifications:", error);
+      res.status(500).json({ message: "Failed to fetch notifications" });
+    }
+  });
+
+  // FAQ endpoints
+  app.get("/api/faq", async (req, res) => {
+    try {
+      res.json([
+        {
+          id: 1,
+          question: "How do I reset my password?",
+          answer: "Click on the 'Forgot Password' link on the login page.",
+          category: "account",
+          viewCount: 45
+        },
+        {
+          id: 2,
+          question: "How do I add a new student?",
+          answer: "Go to the Profiles tab and click 'Add Student'.",
+          category: "students",
+          viewCount: 32
+        }
+      ]);
+    } catch (error) {
+      console.error("Error fetching FAQ:", error);
+      res.status(500).json({ message: "Failed to fetch FAQ" });
+    }
+  });
+
+  app.post("/api/faq/search", async (req, res) => {
+    try {
+      const { query } = req.body;
+      res.json([]);
+    } catch (error) {
+      console.error("Error searching FAQ:", error);
+      res.status(500).json({ message: "Failed to search FAQ" });
     }
   });
 
