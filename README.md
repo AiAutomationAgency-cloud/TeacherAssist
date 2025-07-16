@@ -1,171 +1,180 @@
-# EduRespond - Teacher Automation Platform
+# EduRespond - AI Teacher Communication Assistant
 
-A full-stack web application designed to automate teacher communication workflows using AI-powered response generation.
+A modern, AI-powered platform designed to streamline teacher communication workflows with students and parents.
 
 ## Features
 
-- **Multi-language AI Response Generation**: Generate professional responses using Google Gemini AI
-- **Language Support**: English, Spanish, French, German, Chinese
+- **AI-Powered Response Generation**: Generate contextual responses using advanced AI technology
+- **Multi-Language Support**: Communicate in 50+ languages seamlessly
+- **Student & Parent Profiles**: Maintain detailed profiles for personalized communication
+- **Response Analytics**: Track communication patterns and response times
 - **Template Management**: Save and reuse frequently used responses
-- **Analytics Dashboard**: Track response metrics and language usage
-- **Response History**: View and manage all generated responses
-- **Real-time Activity Tracking**: Monitor system usage and activities
+- **Real-time Notifications**: Get notified of urgent inquiries instantly
 
 ## Tech Stack
 
-- **Frontend**: React 18 + TypeScript + Vite
-- **Backend**: Express.js + TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
+- **Frontend**: React 18 + TypeScript
 - **UI Components**: shadcn/ui + Tailwind CSS
-- **AI Integration**: Google Gemini API
 - **State Management**: TanStack Query
+- **Routing**: Wouter
+- **Backend**: Express.js + TypeScript
+- **Database**: PostgreSQL + Drizzle ORM
+- **AI Integration**: Google Gemini API
+- **Build Tool**: Vite
 
-## Prerequisites
+## Quick Start
 
-- Node.js 18+ 
+### Prerequisites
+
+- Node.js 18 or higher
 - PostgreSQL database
 - Google Gemini API key
 
-## Local Development Setup
+### Installation
 
-### 1. Clone and Install Dependencies
-
+1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/yourusername/edurespond.git
 cd edurespond
+```
+
+2. Install dependencies:
+```bash
 npm install
 ```
 
-### 2. Environment Setup
-
-Create a `.env` file in the root directory:
-
-```env
-DATABASE_URL=postgresql://username:password@localhost:5432/edurespond
-GEMINI_API_KEY=your_gemini_api_key_here
-NODE_ENV=development
+3. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your database URL and API keys
 ```
 
-### 3. Database Setup
-
+4. Set up the database:
 ```bash
-# Push database schema
 npm run db:push
 ```
 
-### 4. Start Development Server
-
+5. Start the development server:
 ```bash
-# Start both frontend and backend
 npm run dev
 ```
 
-The application will be available at:
-- Frontend & Backend: `http://localhost:5000`
+The application will be available at `http://localhost:5000`
 
-## VS Code Setup
+## Development
 
-### Recommended Extensions
-
-Install these VS Code extensions for the best development experience:
-
-```json
-{
-  "recommendations": [
-    "bradlc.vscode-tailwindcss",
-    "esbenp.prettier-vscode",
-    "ms-vscode.vscode-typescript-next",
-    "formulahendry.auto-rename-tag",
-    "christian-kohler.path-intellisense",
-    "ms-vscode.vscode-json"
-  ]
-}
-```
-
-### VS Code Settings
-
-Create `.vscode/settings.json`:
-
-```json
-{
-  "typescript.preferences.importModuleSpecifier": "relative",
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "tailwindCSS.experimental.classRegex": [
-    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ]
-}
-```
-
-## Project Structure
+### Project Structure
 
 ```
 ├── client/                 # React frontend
 │   ├── src/
-│   │   ├── components/     # React components
+│   │   ├── components/     # Reusable components
 │   │   ├── pages/         # Page components
-│   │   ├── hooks/         # Custom hooks
-│   │   └── lib/           # Utilities
+│   │   ├── lib/           # Utilities and configurations
+│   │   └── App.tsx        # Main app component
 ├── server/                # Express backend
-│   ├── services/          # Business logic
 │   ├── routes.ts          # API routes
-│   ├── storage.ts         # Database layer
-│   └── db.ts             # Database connection
-├── shared/                # Shared types/schemas
-│   └── schema.ts         # Drizzle schema
-└── package.json
+│   ├── storage.ts         # Database operations
+│   └── services/          # External service integrations
+├── shared/                # Shared types and schemas
+│   └── schema.ts          # Database schema definitions
+└── README.md
+```
+
+### Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run db:push` - Push database schema changes
+- `npm run db:studio` - Open database studio
+- `npm run check` - Type check the project
+
+### Local Development Setup
+
+1. **VS Code Extensions** (recommended):
+   - TypeScript and JavaScript Language Features
+   - Tailwind CSS IntelliSense
+   - Auto Rename Tag
+   - Prettier - Code formatter
+   - ESLint
+
+2. **VS Code Settings** (`.vscode/settings.json`):
+```json
+{
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "tailwindCSS.experimental.classRegex": [
+    "class\\s*=\\s*[\"']([^\"']+)[\"']",
+    "className\\s*=\\s*[\"']([^\"']+)[\"']"
+  ]
+}
+```
+
+3. **Environment Setup**:
+```bash
+# Create .env file
+DATABASE_URL=postgresql://username:password@localhost:5432/edurespond
+GOOGLE_GEMINI_API_KEY=your_api_key_here
+NODE_ENV=development
 ```
 
 ## API Endpoints
 
-- `GET /api/dashboard/stats` - Dashboard analytics
-- `GET /api/responses` - List responses
-- `POST /api/responses` - Generate new response
-- `GET /api/templates` - List templates
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+- `GET /api/auth/user` - Get current user
+
+### Inquiries
+- `GET /api/inquiries` - Get user inquiries
+- `POST /api/inquiries` - Create new inquiry
+
+### Responses
+- `GET /api/responses` - Get user responses
+- `POST /api/responses` - Generate AI response
+- `PUT /api/responses/:id` - Update response
+- `GET /api/responses/recent` - Get recent responses
+
+### Templates
+- `GET /api/templates` - Get user templates
 - `POST /api/templates` - Create template
-- `GET /api/activities` - List activities
+- `PUT /api/templates/:id` - Update template
 
-## Development Commands
-
-```bash
-# Start development server
-npm run dev
-
-# Type checking
-npm run check
-
-# Database operations
-npm run db:push        # Push schema changes
-npm run db:studio      # Open Drizzle Studio
-
-# Build for production
-npm run build
-```
-
-## Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `DATABASE_URL` | PostgreSQL connection string | Yes |
-| `GEMINI_API_KEY` | Google Gemini API key | Yes |
-| `NODE_ENV` | Environment (development/production) | No |
+### Analytics
+- `GET /api/dashboard/stats` - Get dashboard statistics
+- `GET /api/activities` - Get user activities
 
 ## Deployment
 
-The application is configured for deployment on Replit or any Node.js hosting platform:
+### Production Build
 
-1. Set environment variables
-2. Run `npm run build`
-3. Start with `npm start`
+```bash
+npm run build
+```
+
+### Environment Variables
+
+Required environment variables for production:
+
+```bash
+DATABASE_URL=your_production_database_url
+GOOGLE_GEMINI_API_KEY=your_gemini_api_key
+NODE_ENV=production
+```
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make changes and test
-4. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT License - see LICENSE file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For support, email support@edurespond.com or join our Slack channel.

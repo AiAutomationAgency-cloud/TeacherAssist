@@ -33,38 +33,61 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+          <div className="absolute top-3/4 right-1/4 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-1000"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto text-center relative">
           <div className="mb-8">
-            <Badge variant="outline" className="mb-4">
+            <Badge variant="outline" className="mb-4 glass hover:glow transition-all duration-300">
               <Globe className="w-3 h-3 mr-1" />
               Multi-Language Support
             </Badge>
           </div>
           
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h2 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
             AI-Powered Teacher
             <br />
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent animate-gradient bg-400% float-animation">
               Communication Assistant
             </span>
           </h2>
           
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
             Streamline your communication with students and parents using intelligent AI responses. 
             Generate professional, personalized messages in multiple languages instantly.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Link href="/dashboard">
-              <Button size="lg" className="px-8 py-3">
+              <Button size="lg" className="px-10 py-4 text-lg gradient-hover shadow-lg">
                 Start Creating Responses
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="px-8 py-3">
+            <Button size="lg" variant="outline" className="px-10 py-4 text-lg glass hover:glow transition-all duration-300">
+              <Sparkles className="mr-2 w-5 h-5" />
               Watch Demo
             </Button>
+          </div>
+          
+          {/* Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
+            <div className="glass p-6 rounded-2xl backdrop-blur-sm">
+              <div className="text-3xl font-bold text-blue-600 mb-2">10,000+</div>
+              <div className="text-gray-600">Teachers Using</div>
+            </div>
+            <div className="glass p-6 rounded-2xl backdrop-blur-sm">
+              <div className="text-3xl font-bold text-purple-600 mb-2">50+</div>
+              <div className="text-gray-600">Languages Supported</div>
+            </div>
+            <div className="glass p-6 rounded-2xl backdrop-blur-sm">
+              <div className="text-3xl font-bold text-green-600 mb-2">99.9%</div>
+              <div className="text-gray-600">Uptime</div>
+            </div>
           </div>
         </div>
       </section>
@@ -83,74 +106,74 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Feature Cards */}
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <MessageSquare className="w-6 h-6 text-blue-600" />
+            <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 glass hover:glow group">
+              <CardHeader className="p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <MessageSquare className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle>Smart Response Generation</CardTitle>
-                <CardDescription>
-                  Generate contextual responses for any type of inquiry using advanced AI
+                <CardTitle className="text-xl mb-3">Smart Response Generation</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
+                  Generate contextual responses for any type of inquiry using advanced AI technology
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <Globe className="w-6 h-6 text-green-600" />
+            <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 glass hover:glow group">
+              <CardHeader className="p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Globe className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle>Multi-Language Support</CardTitle>
-                <CardDescription>
-                  Communicate with parents and students in their preferred language
+                <CardTitle className="text-xl mb-3">Multi-Language Support</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
+                  Communicate with parents and students in their preferred language seamlessly
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <Users className="w-6 h-6 text-purple-600" />
+            <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 glass hover:glow group">
+              <CardHeader className="p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Users className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle>Student & Parent Profiles</CardTitle>
-                <CardDescription>
-                  Maintain detailed profiles for personalized communication
+                <CardTitle className="text-xl mb-3">Student & Parent Profiles</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
+                  Maintain detailed profiles for personalized communication experiences
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                  <Clock className="w-6 h-6 text-orange-600" />
+            <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 glass hover:glow group">
+              <CardHeader className="p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Clock className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle>Response Analytics</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl mb-3">Response Analytics</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
                   Track response times, language usage, and communication patterns
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
-                  <Sparkles className="w-6 h-6 text-pink-600" />
+            <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 glass hover:glow group">
+              <CardHeader className="p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle>Template Management</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl mb-3">Template Management</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
                   Save and reuse frequently used responses for common inquiries
                 </CardDescription>
               </CardHeader>
             </Card>
 
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-                  <MessageSquare className="w-6 h-6 text-indigo-600" />
+            <Card className="border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 glass hover:glow group">
+              <CardHeader className="p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <MessageSquare className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle>Real-time Notifications</CardTitle>
-                <CardDescription>
-                  Get notified of urgent inquiries and follow-up reminders
+                <CardTitle className="text-xl mb-3">Real-time Notifications</CardTitle>
+                <CardDescription className="text-base leading-relaxed">
+                  Get notified of urgent inquiries and follow-up reminders instantly
                 </CardDescription>
               </CardHeader>
             </Card>
