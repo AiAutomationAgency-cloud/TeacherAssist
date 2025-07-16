@@ -16,7 +16,7 @@ import {
   type InsertActivity
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, count, sql } from "drizzle-orm";
+import { eq, desc, count, sql, inArray } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -190,7 +190,7 @@ export class DatabaseStorage implements IStorage {
     if (inquiryIds.length === 0) return [];
     
     return await db.select().from(responses).where(
-      sql`${responses.inquiryId} = ANY(${inquiryIds})`
+      inArray(responses.inquiryId, inquiryIds)
     );
   }
 
@@ -200,7 +200,7 @@ export class DatabaseStorage implements IStorage {
     if (inquiryIds.length === 0) return [];
 
     return await db.select().from(responses)
-      .where(sql`${responses.inquiryId} = ANY(${inquiryIds})`)
+      .where(inArray(responses.inquiryId, inquiryIds))
       .orderBy(desc(responses.generatedAt))
       .limit(limit);
   }
