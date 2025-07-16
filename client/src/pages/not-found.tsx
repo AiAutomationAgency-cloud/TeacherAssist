@@ -1,21 +1,47 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertCircle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { MessageSquare, Home, ArrowLeft } from "lucide-react";
+import { Link } from "wouter";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md mx-4">
-        <CardContent className="pt-6">
-          <div className="flex mb-4 gap-2">
-            <AlertCircle className="h-8 w-8 text-red-500" />
-            <h1 className="text-2xl font-bold text-gray-900">404 Page Not Found</h1>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-md text-center">
+        <div className="flex items-center justify-center space-x-2 mb-8">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <MessageSquare className="w-6 h-6 text-white" />
           </div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            EduRespond
+          </h1>
+        </div>
 
-          <p className="mt-4 text-sm text-gray-600">
-            Did you forget to add the page to the router?
-          </p>
-        </CardContent>
-      </Card>
+        <Card className="border-0 shadow-2xl">
+          <CardHeader className="text-center">
+            <div className="text-6xl font-bold text-gray-300 mb-4">404</div>
+            <CardTitle className="text-2xl">Page Not Found</CardTitle>
+            <p className="text-gray-600 mt-2">
+              The page you're looking for doesn't exist or has been moved.
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/" className="flex-1">
+                <Button variant="outline" className="w-full">
+                  <Home className="w-4 h-4 mr-2" />
+                  Go Home
+                </Button>
+              </Link>
+              <Link href="/dashboard" className="flex-1">
+                <Button className="w-full">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Dashboard
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
