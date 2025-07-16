@@ -9,6 +9,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
   await setupAuth(app);
   
+  // Get current user info (for development mode)
+  app.get("/api/users/me", async (req, res) => {
+    try {
+      // Return a default user for development mode
+      res.json({
+        id: 1,
+        username: "demo_teacher",
+        email: "teacher@example.com",
+        firstName: "Demo",
+        lastName: "Teacher",
+        role: "teacher"
+      });
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user information" });
+    }
+  });
+
   // Get dashboard statistics
   app.get("/api/dashboard/stats", async (req, res) => {
     try {
