@@ -7,11 +7,13 @@ import Home from "@/pages/home";
 import EnhancedHome from "@/pages/enhanced-home";
 import Login from "@/pages/login";
 import NotFound from "@/pages/not-found";
+import TestSimple from "@/pages/test-simple";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={EnhancedHome} />
+      <Route path="/" component={TestSimple} />
+      <Route path="/enhanced" component={EnhancedHome} />
       <Route path="/basic" component={Home} />
       <Route path="/login" component={Login} />
       <Route component={NotFound} />
