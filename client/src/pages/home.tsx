@@ -1,7 +1,4 @@
 import { Link } from "wouter";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Users, Clock, Globe, Sparkles, ArrowRight } from "lucide-react";
 
 export default function Home() {
@@ -20,12 +17,14 @@ export default function Home() {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Badge variant="secondary" className="hidden sm:inline-flex">
+              <span className="hidden sm:inline-flex px-3 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
                 <Sparkles className="w-3 h-3 mr-1" />
                 AI Powered
-              </Badge>
+              </span>
               <Link href="/dashboard">
-                <Button>Get Started</Button>
+                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  Get Started
+                </button>
               </Link>
             </div>
           </div>
