@@ -4,6 +4,12 @@
 
 EduRespond is a full-stack web application designed to automate teacher communication workflows. The platform enables teachers to efficiently handle student and parent inquiries by generating AI-powered responses, managing templates, and tracking communication analytics. Built with a modern tech stack, it features a React frontend with shadcn/ui components and an Express.js backend with PostgreSQL database integration.
 
+**Recent Updates (January 2025):**
+- Migrated from OpenAI to Google Gemini AI for response generation
+- Implemented PostgreSQL database with Drizzle ORM replacing in-memory storage
+- Added persistent data storage for inquiries, responses, templates, and analytics
+- Enhanced multi-language support with Gemini's advanced language capabilities
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.

@@ -15,6 +15,8 @@ import {
   type Activity,
   type InsertActivity
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, count, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -56,226 +58,210 @@ export interface IStorage {
   }>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private inquiries: Map<number, Inquiry>;
-  private responses: Map<number, Response>;
-  private templates: Map<number, Template>;
-  private activities: Map<number, Activity>;
-  private currentId: number;
-
+export class DatabaseStorage implements IStorage {
   constructor() {
-    this.users = new Map();
-    this.inquiries = new Map();
-    this.responses = new Map();
-    this.templates = new Map();
-    this.activities = new Map();
-    this.currentId = 1;
-
-    // Initialize with default user and templates
+    // Initialize database with default data if needed
     this.initializeDefaultData();
   }
 
-  private initializeDefaultData() {
-    // Create default user
-    const defaultUser: User = {
-      id: 1,
-      username: "sarah.johnson",
-      password: "password"
-    };
-    this.users.set(1, defaultUser);
+  private async initializeDefaultData() {
+    try {
+      // Check if default user exists
+      const existingUser = await db.select().from(users).where(eq(users.username, "sarah.johnson")).limit(1);
+      
+      if (existingUser.length === 0) {
+        // Create default user
+        await db.insert(users).values({
+          username: "sarah.johnson",
+          password: "password"
+        });
 
-    // Create default templates
-    const defaultTemplates: Template[] = [
-      {
-        id: 2,
-        name: "Assignment Help",
-        type: "assignment_help",
-        content: "Dear Parent,\n\nThank you for reaching out about the assignment. I understand your child might be finding it challenging.\n\n[Assignment specific guidance will be provided here]\n\nPlease don't hesitate to reach out if you have any other questions.\n\nBest regards,\n[Teacher Name]",
-        language: "en",
-        usageCount: 45,
-        userId: 1,
-        createdAt: new Date()
-      },
-      {
-        id: 3,
-        name: "Grade Explanation",
-        type: "grade_inquiry",
-        content: "Dear Parent,\n\nThank you for your inquiry about your child's grade.\n\n[Grade breakdown and explanation will be provided here]\n\nI'm happy to schedule a meeting to discuss this further if needed.\n\nBest regards,\n[Teacher Name]",
-        language: "en",
-        usageCount: 32,
-        userId: 1,
-        createdAt: new Date()
-      },
-      {
-        id: 4,
-        name: "Schedule Info",
-        type: "schedule_question",
-        content: "Dear Parent,\n\nThank you for your question about the schedule.\n\n[Schedule information will be provided here]\n\nPlease let me know if you need any clarification.\n\nBest regards,\n[Teacher Name]",
-        language: "en",
-        usageCount: 28,
-        userId: 1,
-        createdAt: new Date()
-      },
-      {
-        id: 5,
-        name: "Parent Communication",
-        type: "parent_communication",
-        content: "Dear Parent,\n\nThank you for reaching out.\n\n[Communication content will be provided here]\n\nI look forward to working together to support your child's education.\n\nBest regards,\n[Teacher Name]",
-        language: "en",
-        usageCount: 21,
-        userId: 1,
-        createdAt: new Date()
+        // Get the created user
+        const [newUser] = await db.select().from(users).where(eq(users.username, "sarah.johnson"));
+
+        // Create default templates
+        await db.insert(templates).values([
+          {
+            name: "Assignment Help",
+            type: "assignment_help",
+            content: "Dear Parent,\n\nThank you for reaching out about the assignment. I understand your child might be finding it challenging.\n\n[Assignment specific guidance will be provided here]\n\nPlease don't hesitate to reach out if you have any other questions.\n\nBest regards,\n[Teacher Name]",
+            language: "en",
+            usageCount: 45,
+            userId: newUser.id
+          },
+          {
+            name: "Grade Explanation",
+            type: "grade_inquiry",
+            content: "Dear Parent,\n\nThank you for your inquiry about your child's grade.\n\n[Grade breakdown and explanation will be provided here]\n\nI'm happy to schedule a meeting to discuss this further if needed.\n\nBest regards,\n[Teacher Name]",
+            language: "en",
+            usageCount: 32,
+            userId: newUser.id
+          },
+          {
+            name: "Schedule Info",
+            type: "schedule_question",
+            content: "Dear Parent,\n\nThank you for your question about the schedule.\n\n[Schedule information will be provided here]\n\nPlease let me know if you need any clarification.\n\nBest regards,\n[Teacher Name]",
+            language: "en",
+            usageCount: 28,
+            userId: newUser.id
+          },
+          {
+            name: "Parent Communication",
+            type: "parent_communication",
+            content: "Dear Parent,\n\nThank you for reaching out.\n\n[Communication content will be provided here]\n\nI look forward to working together to support your child's education.\n\nBest regards,\n[Teacher Name]",
+            language: "en",
+            usageCount: 21,
+            userId: newUser.id
+          }
+        ]);
       }
-    ];
-
-    defaultTemplates.forEach(template => {
-      this.templates.set(template.id, template);
-    });
-
-    this.currentId = 6;
+    } catch (error) {
+      console.log("Default data already exists or error initializing:", error);
+    }
   }
 
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(user => user.username === username);
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
     return user;
   }
 
   async getInquiry(id: number): Promise<Inquiry | undefined> {
-    return this.inquiries.get(id);
+    const [inquiry] = await db.select().from(inquiries).where(eq(inquiries.id, id));
+    return inquiry || undefined;
   }
 
   async createInquiry(insertInquiry: InsertInquiry): Promise<Inquiry> {
-    const id = this.currentId++;
-    const inquiry: Inquiry = { 
-      ...insertInquiry, 
-      id, 
-      createdAt: new Date(),
-      userId: 1 // Default to user 1 for demo
-    };
-    this.inquiries.set(id, inquiry);
+    const [inquiry] = await db
+      .insert(inquiries)
+      .values({
+        ...insertInquiry,
+        userId: 1 // Default to user 1 for demo
+      })
+      .returning();
     return inquiry;
   }
 
   async getInquiriesByUser(userId: number): Promise<Inquiry[]> {
-    return Array.from(this.inquiries.values()).filter(inquiry => inquiry.userId === userId);
+    return await db.select().from(inquiries).where(eq(inquiries.userId, userId));
   }
 
   async getResponse(id: number): Promise<Response | undefined> {
-    return this.responses.get(id);
+    const [response] = await db.select().from(responses).where(eq(responses.id, id));
+    return response || undefined;
   }
 
   async createResponse(insertResponse: InsertResponse): Promise<Response> {
-    const id = this.currentId++;
-    const response: Response = { 
-      ...insertResponse, 
-      id, 
-      generatedAt: new Date(),
-      sentAt: null
-    };
-    this.responses.set(id, response);
+    const [response] = await db
+      .insert(responses)
+      .values(insertResponse)
+      .returning();
     return response;
   }
 
   async updateResponse(id: number, updateData: Partial<Response>): Promise<Response | undefined> {
-    const response = this.responses.get(id);
-    if (!response) return undefined;
-    
-    const updatedResponse = { ...response, ...updateData };
-    this.responses.set(id, updatedResponse);
-    return updatedResponse;
+    const [response] = await db
+      .update(responses)
+      .set(updateData)
+      .where(eq(responses.id, id))
+      .returning();
+    return response || undefined;
   }
 
   async getResponsesByInquiry(inquiryId: number): Promise<Response[]> {
-    return Array.from(this.responses.values()).filter(response => response.inquiryId === inquiryId);
+    return await db.select().from(responses).where(eq(responses.inquiryId, inquiryId));
   }
 
   async getResponsesByUser(userId: number): Promise<Response[]> {
     const userInquiries = await this.getInquiriesByUser(userId);
     const inquiryIds = userInquiries.map(inquiry => inquiry.id);
-    return Array.from(this.responses.values()).filter(response => 
-      response.inquiryId && inquiryIds.includes(response.inquiryId)
+    if (inquiryIds.length === 0) return [];
+    
+    return await db.select().from(responses).where(
+      sql`${responses.inquiryId} = ANY(${inquiryIds})`
     );
   }
 
   async getRecentResponses(userId: number, limit: number = 10): Promise<Response[]> {
-    const responses = await this.getResponsesByUser(userId);
-    return responses
-      .sort((a, b) => (b.generatedAt?.getTime() || 0) - (a.generatedAt?.getTime() || 0))
-      .slice(0, limit);
+    const userInquiries = await this.getInquiriesByUser(userId);
+    const inquiryIds = userInquiries.map(inquiry => inquiry.id);
+    if (inquiryIds.length === 0) return [];
+
+    return await db.select().from(responses)
+      .where(sql`${responses.inquiryId} = ANY(${inquiryIds})`)
+      .orderBy(desc(responses.generatedAt))
+      .limit(limit);
   }
 
   async getTemplate(id: number): Promise<Template | undefined> {
-    return this.templates.get(id);
+    const [template] = await db.select().from(templates).where(eq(templates.id, id));
+    return template || undefined;
   }
 
   async createTemplate(insertTemplate: InsertTemplate): Promise<Template> {
-    const id = this.currentId++;
-    const template: Template = { 
-      ...insertTemplate, 
-      id, 
-      usageCount: 0,
-      userId: 1, // Default to user 1 for demo
-      createdAt: new Date()
-    };
-    this.templates.set(id, template);
+    const [template] = await db
+      .insert(templates)
+      .values({
+        ...insertTemplate,
+        userId: 1 // Default to user 1 for demo
+      })
+      .returning();
     return template;
   }
 
   async updateTemplate(id: number, updateData: Partial<Template>): Promise<Template | undefined> {
-    const template = this.templates.get(id);
-    if (!template) return undefined;
-    
-    const updatedTemplate = { ...template, ...updateData };
-    this.templates.set(id, updatedTemplate);
-    return updatedTemplate;
+    const [template] = await db
+      .update(templates)
+      .set(updateData)
+      .where(eq(templates.id, id))
+      .returning();
+    return template || undefined;
   }
 
   async getTemplatesByUser(userId: number): Promise<Template[]> {
-    return Array.from(this.templates.values()).filter(template => template.userId === userId);
+    return await db.select().from(templates).where(eq(templates.userId, userId));
   }
 
   async getTemplatesByType(type: string, userId: number): Promise<Template[]> {
-    return Array.from(this.templates.values()).filter(template => 
-      template.type === type && template.userId === userId
-    );
+    return await db.select().from(templates)
+      .where(sql`${templates.type} = ${type} AND ${templates.userId} = ${userId}`);
   }
 
   async incrementTemplateUsage(id: number): Promise<void> {
-    const template = this.templates.get(id);
-    if (template) {
-      template.usageCount = (template.usageCount || 0) + 1;
-      this.templates.set(id, template);
-    }
+    await db
+      .update(templates)
+      .set({ usageCount: sql`${templates.usageCount} + 1` })
+      .where(eq(templates.id, id));
   }
 
   async createActivity(insertActivity: InsertActivity): Promise<Activity> {
-    const id = this.currentId++;
-    const activity: Activity = { 
-      ...insertActivity, 
-      id, 
-      userId: 1, // Default to user 1 for demo
-      createdAt: new Date()
-    };
-    this.activities.set(id, activity);
+    const [activity] = await db
+      .insert(activities)
+      .values({
+        ...insertActivity,
+        userId: 1 // Default to user 1 for demo
+      })
+      .returning();
     return activity;
   }
 
   async getActivitiesByUser(userId: number, limit: number = 10): Promise<Activity[]> {
-    return Array.from(this.activities.values())
-      .filter(activity => activity.userId === userId)
-      .sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))
-      .slice(0, limit);
+    return await db.select().from(activities)
+      .where(eq(activities.userId, userId))
+      .orderBy(desc(activities.createdAt))
+      .limit(limit);
   }
 
   async getDashboardStats(userId: number): Promise<{
@@ -320,4 +306,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
