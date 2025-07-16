@@ -4,6 +4,13 @@ import {
   responses, 
   templates, 
   activities,
+  students,
+  parents,
+  scheduledMessages,
+  attachments,
+  notifications,
+  faqItems,
+  knowledgeBase,
   type User, 
   type InsertUser,
   type Inquiry,
@@ -13,7 +20,21 @@ import {
   type Template,
   type InsertTemplate,
   type Activity,
-  type InsertActivity
+  type InsertActivity,
+  type Student,
+  type InsertStudent,
+  type Parent,
+  type InsertParent,
+  type ScheduledMessage,
+  type InsertScheduledMessage,
+  type Attachment,
+  type InsertAttachment,
+  type Notification,
+  type InsertNotification,
+  type FaqItem,
+  type InsertFaqItem,
+  type KnowledgeBase,
+  type InsertKnowledgeBase
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, count, sql, inArray } from "drizzle-orm";
@@ -23,6 +44,18 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+
+  // Students
+  getStudent(id: number): Promise<Student | undefined>;
+  createStudent(student: InsertStudent): Promise<Student>;
+  getStudentsByUser(userId: number): Promise<Student[]>;
+  updateStudent(id: number, student: Partial<Student>): Promise<Student | undefined>;
+
+  // Parents
+  getParent(id: number): Promise<Parent | undefined>;
+  createParent(parent: InsertParent): Promise<Parent>;
+  getParentsByStudent(studentId: number): Promise<Parent[]>;
+  updateParent(id: number, parent: Partial<Parent>): Promise<Parent | undefined>;
 
   // Inquiries
   getInquiry(id: number): Promise<Inquiry | undefined>;
@@ -44,6 +77,38 @@ export interface IStorage {
   getTemplatesByUser(userId: number): Promise<Template[]>;
   getTemplatesByType(type: string, userId: number): Promise<Template[]>;
   incrementTemplateUsage(id: number): Promise<void>;
+
+  // Scheduled Messages
+  getScheduledMessage(id: number): Promise<ScheduledMessage | undefined>;
+  createScheduledMessage(message: InsertScheduledMessage): Promise<ScheduledMessage>;
+  getScheduledMessagesByUser(userId: number): Promise<ScheduledMessage[]>;
+  updateScheduledMessage(id: number, message: Partial<ScheduledMessage>): Promise<ScheduledMessage | undefined>;
+
+  // Attachments
+  getAttachment(id: number): Promise<Attachment | undefined>;
+  createAttachment(attachment: InsertAttachment): Promise<Attachment>;
+  getAttachmentsByUser(userId: number): Promise<Attachment[]>;
+  deleteAttachment(id: number): Promise<void>;
+
+  // Notifications
+  getNotification(id: number): Promise<Notification | undefined>;
+  createNotification(notification: InsertNotification): Promise<Notification>;
+  getNotificationsByUser(userId: number): Promise<Notification[]>;
+  markNotificationAsRead(id: number): Promise<void>;
+  markAllNotificationsAsRead(userId: number): Promise<void>;
+
+  // FAQ
+  getFaqItem(id: number): Promise<FaqItem | undefined>;
+  createFaqItem(faqItem: InsertFaqItem): Promise<FaqItem>;
+  getFaqItems(): Promise<FaqItem[]>;
+  searchFaqItems(query: string): Promise<FaqItem[]>;
+  incrementFaqViewCount(id: number): Promise<void>;
+
+  // Knowledge Base
+  getKnowledgeBaseItem(id: number): Promise<KnowledgeBase | undefined>;
+  createKnowledgeBaseItem(item: InsertKnowledgeBase): Promise<KnowledgeBase>;
+  getKnowledgeBaseItems(): Promise<KnowledgeBase[]>;
+  searchKnowledgeBase(query: string): Promise<KnowledgeBase[]>;
 
   // Activities
   createActivity(activity: InsertActivity): Promise<Activity>;

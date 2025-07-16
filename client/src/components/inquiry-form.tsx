@@ -11,7 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { insertInquirySchema } from "@shared/schema";
 import { z } from "zod";
-import { Wand2, FileText, RotateCcw, Clock } from "lucide-react";
+import { Wand2, FileText, RotateCcw, Clock, User, GraduationCap } from "lucide-react";
+import ToneSelector from "./tone-selector";
 
 const formSchema = insertInquirySchema.extend({
   content: z.string().min(10, "Inquiry must be at least 10 characters"),
@@ -27,6 +28,7 @@ interface InquiryFormProps {
 export default function InquiryForm({ currentLanguage, onResponseGenerated }: InquiryFormProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [detectedLanguage, setDetectedLanguage] = useState(currentLanguage);
+  const [selectedTone, setSelectedTone] = useState("professional");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
